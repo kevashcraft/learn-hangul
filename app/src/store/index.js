@@ -1,18 +1,40 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
+import VuexPersistence from 'vuex-persist'
 
 import deck from '@/assets/deck.json'
 
 Vue.use(Vuex)
 
+const vuexLocal = new VuexPersistence({
+  key: '한글',
+  storage: window.localStorage
+})
+
 export default new Vuex.Store({
   state: {
     deckGroup: 'Single Consonants',
-    audioEnabled: true
+    cardIdx: 0,
+    audioEnabled: true,
+    darkTheme: false
   },
   mutations: {
     setDeckGroup (state, deckGroup) {
+      state.cardIdx = 0
       state.deckGroup = deckGroup
+    },
+    incCardIdx (state) {
+      if (state.cardIdx >= Object.keys(deck[state.deckGroup]).length - 1) {
+        state.cardIdx = 0
+      } else {
+        state.cardIdx += 1
+      }
+    },
+    toggleAudioEnabled (state) {
+      state.audioEnabled = !state.audioEnabled
+    },
+    toggleDarkTheme (state) {
+      state.darkTheme = !state.darkTheme
     }
   },
   actions: {
@@ -20,6 +42,9 @@ export default new Vuex.Store({
   modules: {
   },
   getters: {
+    deckGroups () {
+      return [...Object.keys(deck), 'All']
+    },
     cards (state) {
       const cards = []
       if (state.deckGroup === 'All') {
@@ -44,5 +69,6 @@ export default new Vuex.Store({
 
       return cards
     }
-  }
+  },
+  plugins: [vuexLocal.plugin]
 })

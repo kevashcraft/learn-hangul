@@ -1,7 +1,7 @@
 <template>
   <v-container style="padding: 0; position: relative;" @click="flip">
     <transition-group name="list" class="card_container" tag="div">
-      <FlashCard v-for="card in cardsArr" :key="card.idx" :card="card" @click="cli()" />
+      <FlashCard v-for="card in cardsArr" :key="card.idx" :card="card" />
     </transition-group>
   </v-container>
 </template>
@@ -48,7 +48,7 @@
 
 <script>
 import FlashCard from './FlashCard'
-import { mapGetters } from 'vuex'
+import { mapGetters, mapMutations, mapState } from 'vuex'
 
 export default {
   name: 'FlashCards',
@@ -56,18 +56,15 @@ export default {
 
   computed: {
     ...mapGetters(['cards']),
+    ...mapState(['cardIdx']),
     cardsArr () {
-      return [this.cards[this.idx]]
+      return [this.cards[this.cardIdx]]
     }
   },
   methods: {
-    cli () {
-      console.log('clii')
-    },
+    ...mapMutations(['incCardIdx']),
     flip () {
-      console.log('flip1')
-      this.idx++
-      // this.$emit('flip')
+      this.incCardIdx()
     }
   },
   data: () => ({

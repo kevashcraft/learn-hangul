@@ -8,11 +8,10 @@
           </v-btn>
         </template>
         <v-list>
-          <v-list-item>
-            <v-list-item-title>One</v-list-item-title>
-          </v-list-item>
-          <v-list-item>
-            <v-list-item-title>One</v-list-item-title>
+          <v-list-item v-for="groupName in deckGroups" :key="groupName"
+            @click="setDeckGroup(groupName)"
+            :class="deckGroup === groupName ? 'deck-selected' : ''">
+            <v-list-item-title v-text="groupName"></v-list-item-title>
           </v-list-item>
         </v-list>
       </v-menu>
@@ -28,8 +27,9 @@
             <v-list-item-title v-show="audioEnabled">Turn Audio Off</v-list-item-title>
             <v-list-item-title v-show="!audioEnabled">Turn Audio On</v-list-item-title>
           </v-list-item>
-          <v-list-item>
-            <v-list-item-title>One</v-list-item-title>
+          <v-list-item @click="toggleDarkTheme">
+            <v-list-item-title v-show="darkTheme">Light Theme</v-list-item-title>
+            <v-list-item-title v-show="!darkTheme">Dark Theme</v-list-item-title>
           </v-list-item>
         </v-list>
       </v-menu>
@@ -38,13 +38,22 @@
   </v-container>
 </template>
 
+<style>
+.deck-selected {
+  background: rgb(0,0,0,.2)
+}
+</style>
+
 <script>
-import { mapActions, mapState } from 'vuex'
+import { mapGetters, mapMutations, mapState } from 'vuex'
 
 export default {
   name: 'ActionBar',
-  computed: mapState(['audioEnabled', 'deckGroup']),
-  methods: mapActions(['toggleAudioEnabled']),
+  computed: {
+    ...mapGetters(['deckGroups']),
+    ...mapState(['audioEnabled', 'darkTheme', 'deckGroup'])
+  },
+  methods: mapMutations(['setDeckGroup', 'toggleAudioEnabled', 'toggleDarkTheme']),
   data: () => ({
   }),
 }
