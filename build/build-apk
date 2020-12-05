@@ -1,0 +1,7 @@
+#!/bin/bash
+/bin/build-app
+cd /cordova/hangul
+rm -rf www
+mv /app/dist www
+cordova build android
+cp /cordova/hangul/platforms/android/app/build/outputs/apk/debug/app-debug.apk /dist/

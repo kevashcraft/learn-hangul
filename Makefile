@@ -34,7 +34,7 @@ cordova_prod: cordova_build
 	docker run \
 			-it \
 			-v $(shell pwd)/dist:/dist \
-			-v $(shell pwd)/secret:/secret \
+			-v $(shell pwd)/secrets:/secrets \
 			-v $(shell pwd)/app/src:/app/src \
 			-v $(shell pwd)/app/public:/app/public \
 			-v $(shell pwd)/build/config.xml:/cordova/hangul/config.xml \
@@ -46,8 +46,8 @@ cordova_prod: cordova_build
 																		cordova build android \
 								--release \
 								-- \
-								--keystore /secret/learn-hangul.keystore \
-								--alias mcr \
+								--keystore /secrets/learn-hangul.keystore \
+								--alias learn-hangul \
 								--storePassword=$(keystore_pass) \
 								--password=$(keystore_pass) && \
 								cp /cordova/hangul/platforms/android/app/build/outputs/apk/release/app-release.apk /dist/app-release.apk"
