@@ -24,7 +24,15 @@ export default new Vuex.Store({
       state.deckGroup = deckGroup
     },
     incCardIdx (state) {
-      if (state.cardIdx >= Object.keys(deck[state.deckGroup]).length - 1) {
+      let cardCount = 0
+      if (state.deckGroup === 'All') {
+        Object.keys(deck).forEach(group => {
+          cardCount += Object.keys(deck[group]).length
+        })
+      } else {
+        cardCount = Object.keys(deck[state.deckGroup]).length
+      }
+      if (state.cardIdx >= cardCount - 1) {
         state.cardIdx = 0
       } else {
         state.cardIdx += 1
